@@ -60,8 +60,7 @@ INSERT INTO rangers(name, region) VALUES ('Derek Fox', 'Coastal Plains');
 
 
 -- Problem 2
-SELECT  count(DISTINCT common_name) as unique_species_count FROM sightings
-    JOIN species ON sightings.species_id = species.species_id;
+SELECT  count(DISTINCT species_id) as unique_species_count FROM sightings;
 
 
 -- Problem 3
@@ -71,7 +70,7 @@ SELECT * FROM sightings
 --Problem 4
 SELECT name, count(*) as total_sightings FROM sightings
     JOIN rangers ON sightings.ranger_id = rangers.ranger_id
-    GROUP BY name;
+    GROUP BY rangers.ranger_id;
 
 
 -- Problem 5
@@ -96,8 +95,8 @@ UPDATE species
 
 SELECT sighting_id,
   CASE 
-    WHEN to_char(sighting_time, 'HH24')::int < 12 THEN 'Morning'
-    WHEN to_char(sighting_time, 'HH24')::int BETWEEN 12 AND 16 THEN 'Afternoon'
+    WHEN extract(HOUR FROM sighting_time) < 12 THEN 'Morning'
+    WHEN extract(HOUR FROM sighting_time) BETWEEN 12 AND 16 THEN 'Afternoon'
     ELSE 'Evening'
   END AS time_of_day
 FROM sightings;
